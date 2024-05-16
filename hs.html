@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulator Pesawat Terbang</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  canvas {
+    border: 1px solid #ccc;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Simulator Pesawat Terbang</h1>
+<p>Gunakan tombol panah untuk mengendalikan pesawat</p>
+<canvas id="gameCanvas" width="800" height="400"></canvas>
+
+<script>
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const plane = {
+    x: 50,
+    y: canvas.height / 2,
+    width: 50,
+    height: 30,
+    speed: 5,
+    dx: 0,
+    dy: 0
+  };
+
+  function drawPlane() {
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(plane.x, plane.y, plane.width, plane.height);
+  }
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function movePlane() {
+    plane.x += plane.dx;
+    plane.y += plane.dy;
+
+    if (plane.x < 0) {
+      plane.x = 0;
+    } else if (plane.x + plane.width > canvas.width) {
+      plane.x = canvas.width - plane.width;
+    }
+
+    if (plane.y < 0) {
+      plane.y = 0;
+    } else if (plane.y + plane.height > canvas.height) {
+      plane.y = canvas.height - plane.height;
+    }
+  }
+
+  function draw() {
+    clearCanvas();
+    drawPlane();
+    movePlane();
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowUp') {
+      plane.dy = -plane.speed;
+    } else if (event.key === 'ArrowDown') {
+      plane.dy = plane.speed;
+    } else if (event.key === 'ArrowLeft') {
+      plane.dx = -plane.speed;
+    } else if (event.key === 'ArrowRight') {
+      plane.dx = plane.speed;
+    }
+  });
+
+  window.addEventListener('keyup', (event) => {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      plane.dy = 0;
+    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      plane.dx = 0;
+    }
+  });
+
+  draw();
+</script>
+
+</body>
+</html>
